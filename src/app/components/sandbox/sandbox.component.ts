@@ -3,49 +3,30 @@ import { Component } from '@angular/core';
 @Component({
     selector: 'sandbox',
     template: `
-        <h1>Hello World</h1>
-        {{ people }}
-        <ul>
-            <li *ngFor="let person of people">
-                {{person}}
-            </li>
-        </ul>
-        <ul>
-            <li *ngFor="let person of people; let i = index">
-                {{ i + 1 }} {{person}}
-            </li>
-        </ul>
-        <ul>
-            <li *ngFor="let person of people2">
-                {{person.firstName}} {{person.lastName}}
-            </li>
-        </ul>
+    <h1>Hello 
+       <!--
+       <span *ngIf="showName">{{name}}</span>
+       <span *ngIf="!showName">World</span> 
+       -->
+       <span *ngIf="showName; else noName">{{ name }}</span>
+       <ng-template #noName>World</ng-template>
+    </h1>
+    <p>Hello {{ showName ? name : 'World' }}</p>
+
+    <hr>
+
+    <div [ngSwitch]="greeting">
+        <div *ngSwitchCase="'1'">Hello World</div>
+        <div *ngSwitchCase="'2'">Hi You</div>
+        <div *ngSwitchCase="'3'">Hey Me</div>
+        <div *ngSwitchDefault>Sup</div>
+    </div>
     `
 })
 
 export class SandboxComponent{
-    people = ['Rick', 'Darrell', 'Carl', 'Glen'];
-    people2 = [
-        {
-            firstName: 'Rick',
-            lastName: 'Mwila'
-        },
-        {
-            firstName: 'Jerry',
-            lastName: 'Johnson'
-        },
-        {
-            firstName: 'Xoliswe',
-            lastName: 'Zulu'
-        },
-        {
-            firstName: 'Chanda',
-            lastName: 'Mwila'
-        }
-    ];
-
-    constructor(){
-        this.people[2] = 'Xavier';
-    }
+    name:string = 'John Doe';
+    showName:boolean = false;
+    greeting:number = 2;
 }
 

@@ -3,31 +3,28 @@ import { Component } from '@angular/core'
 @Component({
     selector: 'sandbox',
     template: `
-        <h1>Hello {{ text }}</h1>
-        <div>
-            <input type="text" (keyup)="fireEvent($event)" placeholder="keyup event">
-        </div>
-        <div>
-            <input type="text" (focus)="fireEvent($event)" placeholder="focus">
-        </div>
-        <div>
-            <input type="text" (blur)="fireEvent($event)" placeholder="blur">
-        </div>
-        <div>
-            <input type="text" (copy)="fireEvent($event)" placeholder="copy">
-        </div>
-        <div>
-            <input type="text" (paste)="fireEvent($event)" placeholder="paste">
+        <h1>Hello World</h1>
+        <div class="container">
+            <form>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" [(ngModel)]="name" name="name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Age</label>
+                    <input type="number" [(ngModel)]="age" name="age" class="form-control">
+                </div>
+                <input type="submit" value="Submit" class="btn btn-success">
+            </form>
+
+            <h4>Name: {{ name }}</h4>
+            <h4>Age: {{ age }}</h4>
         </div>
     `
 })
 
 export class SandboxComponent{
-    text:string = '';
-
-    fireEvent(e){
-        console.log(e.type);
-        this.text = e.target.value;
-    }
+    name:string = '';
+    age:number = 0;
 }
 

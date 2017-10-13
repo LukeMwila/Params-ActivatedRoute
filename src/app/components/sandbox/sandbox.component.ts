@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { DataService } from '../../services/data.service';
 
 @Component({
-    selector: 'sandbox',
-    template: `
+    selector:'sandbox',
+    template:`
         <h1>Hello World</h1>
-        <form (submit)="onSubmit()">
+        <form (submit)="onSubmit(isEdit)">
             <div class="form-group">
                 <label>Name</label>
                 <input type="text" class="form-control" [(ngModel)]="user.name" name="name">
@@ -23,12 +23,13 @@ import { DataService } from '../../services/data.service';
         <hr>
         <div *ngFor="let user of users">
             <div class="well">
-                <ul>
+                <ul class="list-group">
                     <li class="list-group-item">Name: {{ user.name }}</li>
                     <li class="list-group-item">Email: {{ user.email }}</li>
-                    <li class="list-group-item">phone: {{ user.phone }}</li>
+                    <li class="list-group-item">Phone: {{ user.phone }}</li>
                 </ul>
                 <br>
+                <button class="btn btn-primary btn-sm" (click)="onEditClick(user)">Edit</button>
                 <button class="btn btn-danger btn-sm" (click)="onDeleteClick(user.id)">Delete</button>
                 <br><br>
             </div>
@@ -39,33 +40,51 @@ import { DataService } from '../../services/data.service';
 export class SandboxComponent{
     users:any[];
     user = {
-        name: '',
-        email: '',
-        phone: ''
+        id:'',
+        name:'',
+        email:'',
+        phone:''
     }
+    isEdit:boolean = false;
 
-    constructor(public dataService:DataService){
+    constructor(public dataService:DataService)
+    {
         this.dataService.getUsers().subscribe(users => {
             //console.log(users);
             this.users = users;
         });
     }
 
-    onSubmit(){
-        this.dataService.addUser(this.user).subscribe(user => {
-            console.log(user);
-            this.users.unshift(user);
-        });
+    onSubmit(isEdit){
+        if(isEdit){
+            this.dataService.updateUser(this.user).subscribe(user => {
+                for(let i = 0;i < this.users.length;i++){
+                    if(this.users[i].id == this.user.id){
+                        this.users.splice(i,1);
+                    }
+                }
+                this.users.unshift(this.user);
+            });
+        } else {
+            this.dataService.addUser(this.user).subscribe(user => {
+                console.log(user);
+                this.users.unshift(user);
+            });
+        }
     }
 
     onDeleteClick(id){
         this.dataService.deleteUser(id).subscribe(res => {
-            for(let i = 0; i < this.users.length; i++){
+            for(let i = 0;i < this.users.length;i++){
                 if(this.users[i].id == id){
                     this.users.splice(i,1);
                 }
             }
         });
     }
-}
 
+    onEditClick(user){
+        this.isEdit = true;
+        this.user = user;
+    }
+}

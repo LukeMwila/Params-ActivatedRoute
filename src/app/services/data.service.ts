@@ -19,4 +19,9 @@ export class DataService{
             .map(res => res.json());
     }
 
+    deleteUser(id){
+        return this.http.delete('http://jsonplaceholder.typicode.com/users/'+id)
+            .map(res => res.json());
+    }
+
 }

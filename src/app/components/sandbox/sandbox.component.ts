@@ -29,6 +29,8 @@ import { DataService } from '../../services/data.service';
                     <li class="list-group-item">phone: {{ user.phone }}</li>
                 </ul>
                 <br>
+                <button class="btn btn-danger btn-sm" (click)="onDeleteClick(user.id)">Delete</button>
+                <br><br>
             </div>
         </div>
     `
@@ -53,6 +55,16 @@ export class SandboxComponent{
         this.dataService.addUser(this.user).subscribe(user => {
             console.log(user);
             this.users.unshift(user);
+        });
+    }
+
+    onDeleteClick(id){
+        this.dataService.deleteUser(id).subscribe(res => {
+            for(let i = 0; i < this.users.length; i++){
+                if(this.users[i].id == id){
+                    this.users.splice(i,1);
+                }
+            }
         });
     }
 }
